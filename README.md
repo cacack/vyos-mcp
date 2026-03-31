@@ -1,5 +1,11 @@
 # mcp-server-vyos
 
+[![CI](https://github.com/cacack/mcp-server-vyos/actions/workflows/ci.yml/badge.svg)](https://github.com/cacack/mcp-server-vyos/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/cacack/mcp-server-vyos/graph/badge.svg)](https://codecov.io/gh/cacack/mcp-server-vyos)
+[![PyPI](https://img.shields.io/pypi/v/mcp-server-vyos)](https://pypi.org/project/mcp-server-vyos/)
+[![Python](https://img.shields.io/pypi/pyversions/mcp-server-vyos)](https://pypi.org/project/mcp-server-vyos/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 MCP server for VyOS router management via the HTTPS REST API. Provides both router management tools and live VyOS documentation lookup.
 
 ## Installation
