@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from mcp.server.fastmcp import FastMCP
 
 from vyos_mcp.client import VyOSClient
@@ -10,6 +12,20 @@ from vyos_mcp.docs import DocsClient
 mcp = FastMCP("mcp-server-vyos")
 
 _docs_client = DocsClient()
+
+_MUTATING_TOOLS = {
+    "vyos_configure",
+    "vyos_confirm",
+    "vyos_save",
+    "vyos_load",
+    "vyos_merge",
+    "vyos_generate",
+    "vyos_reset",
+    "vyos_reboot",
+    "vyos_poweroff",
+    "vyos_image_add",
+    "vyos_image_delete",
+}
 
 
 def _get_client() -> VyOSClient:
@@ -243,6 +259,20 @@ async def vyos_docs_read(path: str) -> str:
         path: Doc path, e.g. "docs/configuration/firewall/groups.rst"
     """
     return await _docs_client.read_page(path)
+
+
+def _is_read_only() -> bool:
+    return os.environ.get("VYOS_READ_ONLY", "").lower() in ("true", "1")
+
+
+def _apply_read_only() -> None:
+    """Remove mutating tools when read-only mode is enabled."""
+    if _is_read_only():
+        for name in _MUTATING_TOOLS:
+            mcp._tool_manager._tools.pop(name, None)
+
+
+_apply_read_only()
 
 
 def main() -> None:

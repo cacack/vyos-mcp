@@ -20,6 +20,7 @@ Set environment variables:
 
 - `VYOS_URL` — Router API endpoint (e.g., `https://vyos.example.com`)
 - `VYOS_API_KEY` — API key for authentication
+- `VYOS_READ_ONLY` — Set to `true` to disable all mutating tools (config changes, reboot, poweroff, etc.)
 
 ### VyOS Router Setup
 
@@ -50,6 +51,27 @@ Add to your MCP client configuration:
   }
 }
 ```
+
+### Read-Only Mode
+
+For safe, query-only access (monitoring, investigation, documentation lookup), enable read-only mode:
+
+```json
+{
+  "mcpServers": {
+    "vyos": {
+      "command": "mcp-server-vyos",
+      "env": {
+        "VYOS_URL": "https://vyos.example.com",
+        "VYOS_API_KEY": "your-api-key",
+        "VYOS_READ_ONLY": "true"
+      }
+    }
+  }
+}
+```
+
+This registers only non-mutating tools: `vyos_info`, `vyos_retrieve`, `vyos_return_values`, `vyos_exists`, `vyos_config_diff`, `vyos_show`, `vyos_docs_search`, and `vyos_docs_read`.
 
 ## Tools
 
