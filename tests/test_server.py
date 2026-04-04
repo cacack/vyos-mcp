@@ -1,5 +1,7 @@
 """Tests for MCP server tool registration and tool handlers."""
 
+import importlib
+import sys
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -24,6 +26,17 @@ EXPECTED_TOOLS = [
     "vyos_poweroff",
     "vyos_image_add",
     "vyos_image_delete",
+    "vyos_docs_search",
+    "vyos_docs_read",
+]
+
+READ_ONLY_TOOLS = [
+    "vyos_info",
+    "vyos_retrieve",
+    "vyos_return_values",
+    "vyos_exists",
+    "vyos_config_diff",
+    "vyos_show",
     "vyos_docs_search",
     "vyos_docs_read",
 ]
@@ -256,3 +269,49 @@ class TestToolHandlers:
             result = await vyos_docs_read("docs/firewall.rst")
         mock_docs.read_page.assert_called_once_with("docs/firewall.rst")
         assert result == "# Firewall\n\nContent here"
+
+
+class TestReadOnlyMode:
+    """Test read-only mode tool filtering."""
+
+    def _reload_server(self):
+        """Reimport server module to re-run module-level code."""
+        # Remove cached module so _apply_read_only() runs again
+        sys.modules.pop("vyos_mcp.server", None)
+        mod = importlib.import_module("vyos_mcp.server")
+        return mod.mcp
+
+    def test_read_only_true(self, monkeypatch):
+        monkeypatch.setenv("VYOS_READ_ONLY", "true")
+        mcp_ro = self._reload_server()
+        tool_names = set(mcp_ro._tool_manager._tools.keys())
+        assert tool_names == set(READ_ONLY_TOOLS)
+
+    def test_read_only_one(self, monkeypatch):
+        monkeypatch.setenv("VYOS_READ_ONLY", "1")
+        mcp_ro = self._reload_server()
+        tool_names = set(mcp_ro._tool_manager._tools.keys())
+        assert tool_names == set(READ_ONLY_TOOLS)
+
+    def test_read_only_true_uppercase(self, monkeypatch):
+        monkeypatch.setenv("VYOS_READ_ONLY", "TRUE")
+        mcp_ro = self._reload_server()
+        tool_names = set(mcp_ro._tool_manager._tools.keys())
+        assert tool_names == set(READ_ONLY_TOOLS)
+
+    def test_read_only_false(self, monkeypatch):
+        monkeypatch.setenv("VYOS_READ_ONLY", "false")
+        mcp_ro = self._reload_server()
+        tool_names = set(mcp_ro._tool_manager._tools.keys())
+        assert tool_names == set(EXPECTED_TOOLS)
+
+    def test_read_only_unset(self, monkeypatch):
+        monkeypatch.delenv("VYOS_READ_ONLY", raising=False)
+        mcp_ro = self._reload_server()
+        tool_names = set(mcp_ro._tool_manager._tools.keys())
+        assert tool_names == set(EXPECTED_TOOLS)
+
+    def test_read_only_tool_count(self, monkeypatch):
+        monkeypatch.setenv("VYOS_READ_ONLY", "true")
+        mcp_ro = self._reload_server()
+        assert len(mcp_ro._tool_manager._tools) == 8
