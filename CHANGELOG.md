@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.0](https://github.com/cacack/mcp-server-vyos/compare/v0.1.0...v0.2.0) (2026-04-04)
+
+
+### Features
+
+* add config diff/preview tool ([2e186e1](https://github.com/cacack/mcp-server-vyos/commit/2e186e19723a13b19121ff820a510838e9c70303))
+* add config diff/preview tool ([0b2bc10](https://github.com/cacack/mcp-server-vyos/commit/0b2bc105c38584f05896cbd933e1ad14570882c2))
+* add config validation tool ([3ddc930](https://github.com/cacack/mcp-server-vyos/commit/3ddc9304b3ea3fa264eb63bd77cfc038c0ea840c))
+* add config validation tool with auto-rollback ([76df40c](https://github.com/cacack/mcp-server-vyos/commit/76df40c42a088170e1eab97668f33fcfaef2eed8))
+* add read-only mode ([f586c42](https://github.com/cacack/mcp-server-vyos/commit/f586c4248417feeb17fe6a4f2b59c341dd67d31b))
+* add read-only mode via VYOS_READ_ONLY env var ([b34b07c](https://github.com/cacack/mcp-server-vyos/commit/b34b07c55577b5b71e1ffce8db6ef094de4b9b1c))
+* expand test suite, add coverage, update action SHAs ([7a2e2cb](https://github.com/cacack/mcp-server-vyos/commit/7a2e2cb163adbd76cbe38e970df09a3921afbc3c))
+
+
+### Documentation
+
+* add badges to README ([d7f5332](https://github.com/cacack/mcp-server-vyos/commit/d7f5332c262764ade471552dfc5733796446cf71))
+* add CI, coverage, PyPI, and license badges to README ([933471e](https://github.com/cacack/mcp-server-vyos/commit/933471e18ad4b02ab4af63fd4a27bf8afa7b4631))
+
 ## 0.1.0 (2026-03-31)
 
 
